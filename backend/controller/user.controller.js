@@ -1,4 +1,5 @@
 import User from "../model/User.js";
+import setToken from "../utils/createToken.js";
 
 const signup = async (req, res) => {
   const { fullname, email, password, isAdmin } = req.body;
@@ -20,8 +21,10 @@ const login = async (req, res) => {
   if (!user) {
     return res.status(404).send({ message: "User not found!" });
   }
+
   const isMatch = await user.comparePassword(password);
   if (isMatch) {
+    setToken(user._id, res);
     res.send({ message: "Login Success" });
   } else {
     res.send({ error: "Invalid password!" });
