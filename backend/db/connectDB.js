@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 async function connectDB() {
   try {
     const connection = await mongoose.connect(
-      "mongodb://localhost:27017/Batch13",
+      process.env.MONGODB_CONNECTION_URI,
     );
     console.log("Connected to DB at", connection.connection.host);
   } catch (err) {

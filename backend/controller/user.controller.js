@@ -21,10 +21,9 @@ const login = async (req, res) => {
   if (!user) {
     return res.status(404).send({ message: "User not found!" });
   }
-
   const isMatch = await user.comparePassword(password);
   if (isMatch) {
-    setToken(user._id, res);
+    setToken(user._id, res)
     res.send({ message: "Login Success" });
   } else {
     res.send({ error: "Invalid password!" });
