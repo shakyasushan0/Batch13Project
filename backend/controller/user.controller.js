@@ -23,10 +23,17 @@ const login = async (req, res) => {
   }
   const isMatch = await user.comparePassword(password);
   if (isMatch) {
-    setToken(user._id, res)
-    res.send({ message: "Login Success" });
+    setToken(user._id, res);
+    res.send({
+      message: "Login Success",
+      user: {
+        email: user.email,
+        fullname: user.fullname,
+        isAdmin: user.isAdmin,
+      },
+    });
   } else {
-    res.send({ error: "Invalid password!" });
+    res.status(400).send({ error: "Invalid password!" });
   }
 };
 

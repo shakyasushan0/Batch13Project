@@ -12,6 +12,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
 import { Link } from "react-router";
 import { FaTrash } from "react-icons/fa";
+import Message from "../components/Message";
 
 function CartPage() {
   const { cartItems, totalPrice } = useSelector((state) => state.cart);
@@ -24,7 +25,9 @@ function CartPage() {
     <Row>
       <Col md={8}>
         {cartItems.length == 0 ? (
-          <h3>Cart is empty</h3>
+          <Message>
+            Cart is empty. <Link to="/">Go Back</Link>
+          </Message>
         ) : (
           <>
             <h2>Cart Items</h2>

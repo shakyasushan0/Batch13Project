@@ -3,15 +3,17 @@ import { Row, Col } from "react-bootstrap";
 import Product from "../components/Product";
 import axios from "axios";
 import { useGetProductsQuery } from "../slices/productApiSlice";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 function HomePage() {
   const { data: products, isLoading, error } = useGetProductsQuery();
   return (
     <>
       {isLoading ? (
-        <h2>Loading...</h2>
+        <Loader />
       ) : error ? (
-        <h2>{error?.data?.error || error?.error}</h2>
+        <Message variant="danger">{error?.data?.error || error?.error}</Message>
       ) : (
         <>
           <h2>Latest Products</h2>

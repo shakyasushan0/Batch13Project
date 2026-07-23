@@ -15,6 +15,8 @@ import {
   Form,
 } from "react-bootstrap";
 import Rating from "../components/Rating";
+import Loader from "../components/Loader";
+import Message from "../components/Message";
 
 function ProductPage() {
   const [qty, setQty] = useState(1);
@@ -24,9 +26,9 @@ function ProductPage() {
   return (
     <>
       {isLoading ? (
-        <h1>Loading...</h1>
+        <Loader />
       ) : error ? (
-        <h2>{error?.data?.error || error?.error}</h2>
+        <Message variant="danger">{error?.data?.error || error?.error}</Message>
       ) : (
         <>
           <Link className="btn btn-light my-3" to="/">
