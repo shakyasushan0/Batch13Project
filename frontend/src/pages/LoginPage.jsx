@@ -4,18 +4,22 @@ import { Button, Form } from "react-bootstrap";
 import { useLoginMutation } from "../slices/userApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "../slices/authSlice";
-import { useNavigate } from "react-router";
-
+import { useNavigate, useLocation } from "react-router";
+import { toast } from "react-toastify";
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { userInfo } = useSelector((state) => state.auth);
+  const { search } = useLocation(); // ?redirect=/shipping
+  const sp = new URLSearchParams(search);
+  const redirect = sp.get("redirect") || "/";
+
   const navigate = useNavigate();
   useEffect(() => {
     if (userInfo) {
-      navigate("/");
+      navigate(redirect);
     }
-  }, [userInfo, navigate]);
+  }, [userInfo, navigate, redirect]);
   const dispatch = useDispatch();
   // const { data: products, isLoading, error } = useGetProductsQuery();
   const [login, { isLoading }] = useLoginMutation();
@@ -24,8 +28,9 @@ function LoginPage() {
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials(res.user));
+      toast.success(res.message);
     } catch (err) {
-      console.log(err);
+      toast.error(err?.data?.error);
     }
   };
   return (

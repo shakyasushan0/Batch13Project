@@ -82,7 +82,9 @@ function CartPage() {
               <strong>${totalPrice}</strong>
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button variant="dark">Proceed to Checkout</Button>
+              <Link className="btn btn-dark" to="/login?redirect=/shipping">
+                Proceed to Checkout
+              </Link>
             </ListGroup.Item>
           </ListGroup>
         </Card>
