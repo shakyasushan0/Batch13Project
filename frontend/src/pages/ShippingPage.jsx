@@ -3,6 +3,8 @@ import FormContainer from "../components/FormContainer";
 import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setShippingAddress } from "../slices/cartSlice";
+import { useNavigate } from "react-router";
+import CheckoutSteps from "../components/CheckoutSteps";
 
 const ShippingPage = () => {
   const { shippingAddress } = useSelector((state) => state.cart);
@@ -13,6 +15,7 @@ const ShippingPage = () => {
     country: shippingAddress?.country || "",
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -20,10 +23,12 @@ const ShippingPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(setShippingAddress(data));
+    navigate("/payment");
   };
 
   return (
     <FormContainer>
+      <CheckoutSteps step1 step2 />
       <h1>Shipping</h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="my-2">
