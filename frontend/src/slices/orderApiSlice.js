@@ -10,7 +10,22 @@ const orderApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    getOrderById: builder.query({
+      query: (id) => ({
+        url: `${ORDER_URL}/${id}`,
+      }),
+      keepUnusedDataFor: 5,
+    }),
+    getPaymentDetails: builder.query({
+      query: (id) => ({
+        url: `${ORDER_URL}/${id}/getpaymentdetails`,
+      }),
+    }),
   }),
 });
 
-export const { useAddOrderMutation } = orderApiSlice;
+export const {
+  useAddOrderMutation,
+  useGetOrderByIdQuery,
+  useLazyGetPaymentDetailsQuery,
+} = orderApiSlice;
