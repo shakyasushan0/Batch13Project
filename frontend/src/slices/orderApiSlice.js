@@ -21,6 +21,11 @@ const orderApiSlice = apiSlice.injectEndpoints({
         url: `${ORDER_URL}/${id}/getpaymentdetails`,
       }),
     }),
+    getMyOrders: builder.query({
+      query: () => ({
+        url: `${ORDER_URL}/myorders`,
+      }),
+    }),
   }),
 });
 
@@ -28,4 +33,5 @@ export const {
   useAddOrderMutation,
   useGetOrderByIdQuery,
   useLazyGetPaymentDetailsQuery,
+  useGetMyOrdersQuery,
 } = orderApiSlice;

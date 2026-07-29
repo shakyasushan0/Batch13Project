@@ -30,6 +30,7 @@ function LoginPage() {
       dispatch(setCredentials(res.user));
       toast.success(res.message);
     } catch (err) {
+      console.log(err);
       toast.error(err?.data?.error);
     }
   };

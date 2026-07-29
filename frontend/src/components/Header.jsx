@@ -1,7 +1,7 @@
 import { Navbar, Nav, Container, Badge, NavDropdown } from "react-bootstrap";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { NavLink, useNavigate } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import logo from "../assets/react.svg";
 import { useLogoutMutation } from "../slices/userApiSLice";
 import { removeCredentials } from "../slices/authSlice";
@@ -48,7 +48,9 @@ function Header() {
 
               {userInfo ? (
                 <NavDropdown title={userInfo.fullname}>
-                  <NavDropdown.Item>Profile</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/profile">
+                    Profile
+                  </NavDropdown.Item>
                   <NavDropdown.Item onClick={logoutHandler}>
                     Logout
                   </NavDropdown.Item>
