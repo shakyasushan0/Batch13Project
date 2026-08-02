@@ -1,16 +1,35 @@
 import React from "react";
 import { Link, useParams } from "react-router";
-import { useGetOrderByIdQuery } from "../slices/orderApiSlice";
+import {
+  useDeliverOrderMutation,
+  useGetOrderByIdQuery,
+} from "../slices/orderApiSlice";
 import Loading from "../components/Loader";
 import Message from "../components/Message";
 import { ListGroup, Row, Col, Image, Card, Button } from "react-bootstrap";
 import { useLazyGetPaymentDetailsQuery } from "../slices/orderApiSlice";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 function OrderDetailPage() {
   const { id } = useParams();
-  const { data: order, isLoading, error } = useGetOrderByIdQuery(id);
+  const { data: order, isLoading, error, refetch } = useGetOrderByIdQuery(id);
   const [getPaymentDetails, { data, isFetching }] =
     useLazyGetPaymentDetailsQuery();
+
+  const [deliverOrder, { isLoading: orderDeliverLoading }] =
+    useDeliverOrderMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  const handleOrderDelivery = async () => {
+    try {
+      const res = await deliverOrder({ _id: order._id }).unwrap();
+      refetch();
+      toast.success(res.message);
+    } catch (err) {
+      toast.error(err?.data?.error);
+    }
+  };
 
   const handlePayment = async () => {
     try {
@@ -30,6 +49,7 @@ function OrderDetailPage() {
       document.body.appendChild(form);
       form.submit();
     } catch (err) {
+      console.log(err);
       toast.error(err?.data?.error);
     }
   };
@@ -80,9 +100,7 @@ function OrderDetailPage() {
                       : "E-Sewa"}
                   </p>
                   {order.isPaid ? (
-                    <Message variant="success">
-                      Delivered at {order.paidAt}
-                    </Message>
+                    <Message variant="success">Paid at {order.paidAt}</Message>
                   ) : (
                     <Message variant="danger">Not Paid!</Message>
                   )}
@@ -134,9 +152,14 @@ function OrderDetailPage() {
                     </Row>
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    {order.paymentMethod == "esewa" && (
+                    {order.paymentMethod == "esewa" && !userInfo.isAdmin && (
                       <Button variant="dark" onClick={handlePayment}>
                         Pay via Esewa
+                      </Button>
+                    )}
+                    {userInfo.isAdmin && !order.isDelivered && (
+                      <Button variant="dark" onClick={handleOrderDelivery}>
+                        Mark as Delivered
                       </Button>
                     )}
                   </ListGroup.Item>

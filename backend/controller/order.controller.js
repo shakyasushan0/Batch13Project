@@ -27,7 +27,7 @@ const addOrder = async (req, res) => {
 };
 
 const getOrders = async (req, res) => {
-  const orders = await Order.find();
+  const orders = await Order.find().populate("user", "fullname");
   res.send(orders);
 };
 
@@ -47,8 +47,13 @@ const deliverOrder = async (req, res) => {
   const { id } = req.params;
   const order = await Order.findById(id);
   if (!order) return res.status(404).send({ error: "Order not found" });
-  if (!order.isPaid)
+  if (order.paymentMethod == "esewa" && !order.isPaid)
     return res.status(400).send({ error: "Order not paid yet!" });
+
+  if (order.paymentMethod == "cod") {
+    order.isPaid = true;
+    order.paidAt = new Date();
+  }
   order.isDelivered = true;
   order.deliveredAt = new Date();
 
